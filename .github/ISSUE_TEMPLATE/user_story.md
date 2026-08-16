@@ -13,5 +13,11 @@ assignees: mpickell810
 **So that** [achieve some goal/value]
 
 ### Acceptance Criteria
-- [ ] Criteria 1
-- [ ] Criteria 2
+- [ ] **Scenario 1: **
+**Given** 
+**When** 
+**Then** 
+- [ ] **Scenario 2: **
+**Given** 
+**When** 
+**Then** 
