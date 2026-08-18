@@ -12,7 +12,11 @@ assignees: mpickell810
 **I want to** [perform some action]
 **So that** [achieve some goal/value]
 
+### Details and Assumptions
+    * [document what you know]
+
 ### Acceptance Criteria
+gherkin
 - [ ] **Scenario 1: **
 **Given** 
 **When** 
