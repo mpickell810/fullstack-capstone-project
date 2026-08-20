@@ -1,7 +1,8 @@
 const express = require('express');
-const router express.Router();
+const router = express.Router();
 const connectToDatabase = require("../models/db");
 const logger = require('../logger');
+const { ObjectID } = require('mongodb');
 
 // Get all gifts
 router.get('/', async (req, res, next) => {
@@ -11,11 +12,11 @@ router.get('/', async (req, res, next) => {
         // Task 2: use the collection() method to retrieve the gift collection
         const collection = db.collection("gifts");
         // Task 3: Fetch all gifts using the collection.find method. Chain with toArray method to convert to JSON array
-        const gifts = await collection.find{{}}.toArray();
+        const gifts = await collection.find({}).toArray();
         // Task 4: return the gifts using the res.json method
         res.json(gifts);
     } catch (e) {
-        logger.console.error('Error fetching gifts:', e)
+        logger.error('Error fetching gifts:', e)
         next(e);
     }
 });
@@ -37,7 +38,7 @@ router.get('/:id', async (req, res, next) => {
 
         res.json(gift);
     } catch (e) {
-        console.error('Error fetching gift:', e);
+        logger.error('Error fetching gift:', e);
         next(e);
     }
 });
@@ -49,7 +50,9 @@ router.post('/', async (req, res, next) => {
         const collection = db.collection("gifts");
         const gift = await collection.insertOne(req.body);
 
-        res.status(201).json(gift.ops[0]);
+        const created = result.ops ? result.ops[0] : { _id: result.insertID, ...req.body };
+
+        res.status(201).json(created);
     } catch (e) {
         next(e);
     }
