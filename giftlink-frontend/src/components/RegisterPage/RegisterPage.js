@@ -30,6 +30,22 @@ function RegisterPage() {
         }catch (e) {
             console.log("Error fetching details: " + e.message);
         }
+        
+        const json = await response.json();
+        console.log('json data', json);
+        console.log('er', json.error);
+
+        if (json.authtoken) {
+            sessionStorage.setItem('auth-token', json.authtoken);
+            sessionStorage.setItem('name', firstName);
+            sessionStorage.setItem('email', json.email);
+            setIsLoggenIn(ture);
+            navigate('/app');
+            if (json.error) {
+            setShowerr(json.error);
+            }
+        }
+
         console.log("Register invoked")
     };
     
@@ -74,6 +90,7 @@ function RegisterPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.vlaue)}
                         />
+                        <div className="text-danger">{showerr}</div>
                     </div>
                     {/* password */}
                     <div className="mb-4">
