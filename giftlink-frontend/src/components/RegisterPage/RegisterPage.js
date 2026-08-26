@@ -27,10 +27,10 @@ function RegisterPage() {
                     password: password
                 })
             });
-        }catch (e) {
+        } catch (e) {
             console.log("Error fetching details: " + e.message);
         }
-        
+
         const json = await response.json();
         console.log('json data', json);
         console.log('er', json.error);
