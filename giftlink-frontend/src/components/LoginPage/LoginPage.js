@@ -22,11 +22,11 @@ function LoginPage() {
 const handleLogin = async (e) => {
     if (e && typeof e.preventDefault === 'function') e.preventDefault();
     try{
-      const response = await fetch(`/api/auth/login`, {
+      const response = await fetch(`${urlConfig}/api/auth/login`, {
 		   method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            ...(bearToken ? { Authorization: `Bearer ${bearerToken}` } : {}), // Include Bearer token if available
+            ...(bearerToken ? { Authorization: `Bearer ${bearerToken}` } : {}), // Include Bearer token if available
         },
         body: JSON.stringify({
             email,
