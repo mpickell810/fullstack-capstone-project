@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {urlConfig} from '../../config';
 import { useAppContext } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css';
 
 function LoginPage() {
@@ -33,7 +33,7 @@ const handleLogin = async (e) => {
             password,
         }),
     });
-    const json = await res.json();
+    const json = await response.json();
 
     if (json && json.authtoken) {
         sessionStorage.setItem('auth-token', json.authtoken);
@@ -53,7 +53,6 @@ const handleLogin = async (e) => {
         setIncorrect('Login failed. Please try again.');
         setTimeout(() => setIncorrect(''), 3000);
     }
-  }
 };        
 
 	return (
@@ -92,7 +91,7 @@ const handleLogin = async (e) => {
   		<button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
         </form>
 		<p className="mt-4 text-center">
-			New here? <a href="/app/register" className="text-primary">Register Here</a>
+			New here? <Link to="/app/register" className="text-primary">Register Here</Link>
 		</p>
 
             </div>
@@ -100,5 +99,5 @@ const handleLogin = async (e) => {
         </div>
       </div>
     );
-
+}
 export default LoginPage;
