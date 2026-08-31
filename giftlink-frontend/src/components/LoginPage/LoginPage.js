@@ -7,11 +7,10 @@ import './LoginPage.css';
 function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const handleLogin = async () => {
-        console.log("Inside handleLogin");
     const [incorrect, setIncorrect] = useState('');
     const navigate = useNavigate();
-    const bearerToken = sessionStorage.getItem('bearer-token');
+
+    const bearerToken = sessionStorage.getItem('auth-token') || sessionStorage.getItem('bearer-token');
     const { setIsLoggedIn } = useAppContext();
         
     useEffect(() => {
@@ -21,39 +20,41 @@ function LoginPage() {
         }, [navigate])
 
 const handleLogin = async (e) => {
-    e.preventDefault();
-	try{
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    try{
       const response = await fetch(`/api/auth/login`, {
 		   method: 'POST',
         headers: {
-            'content-type': 'application/json',
-            'Authorization': bearerToken ? `Bearer ${bearerToken}` : '', // Include Bearer token if available
+            'Content-Type': 'application/json',
+            ...(bearToken ? { Authorization: `Bearer ${bearerToken}` } : {}), // Include Bearer token if available
         },
         body: JSON.stringify({
-            email: email,
-            password: password,
-        })
+            email,
+            password,
+        }),
     });
-    const json = await res.json();    
-    if (json.authtoken) {
+    const json = await res.json();
+
+    if (json && json.authtoken) {
         sessionStorage.setItem('auth-token', json.authtoken);
-        sessionStorage.setItem('name', json.userName);
-        sessionStorage.setItem('email', json.userEmail);
-        setIsLoggedIn(true);
+        if (json.userName) sessionStorage.setItem('name', json.userName);
+        if (json.userEmail) sessionStorage.setItem('email', json.userEmail);
+        if (typeof setIsLoggedIn === 'function') setIsLoggedIn(true);
         navigate('/app');
     } else {
-        document.getElementById("email").value="";
-        document.getElementById("password").value="";
+        // Clear controlled inputs via state
+        setEmail('');
+        setPassword('');
         setIncorrect("Wrong password. Try again.");
-        setTimeout(() => {
-            setIncorrect("");
-        }, 2000);
+        setTimeout(() => setIncorrect(''), 2000);
     }
-	}catch (e) {
-        console.log("Error fetching details: " + e.message);
+	}catch (err) {
+        console.error('Error fetching details:', err);
+        setIncorrect('Login failed. Please try again.');
+        setTimeout(() => setIncorrect(''), 3000);
     }
   }
-}        
+};        
 
 	return (
       <div className="container mt-5">
@@ -62,6 +63,7 @@ const handleLogin = async (e) => {
             <div className="login-card p-4 border rounded">
               <h2 className="text-center mb-4 font-weight-bold">Login</h2>
 
+        <form onSubmit={handleLogin}>
   		<div className="mb-3">
             <label htmlFor="email" className="form-label">Email</label>
             <input
@@ -84,19 +86,19 @@ const handleLogin = async (e) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-        <span style={{color:'red',height:'.5cm',display:'block',fontStyle:'italic',fontSize:'12px'}}>{incorrect}</span>
+        <span style={{ color:'red', height:'.5cm', display:'block', fontStyle:'italic', fontSize:'12px' }}>{incorrect}</span>
         </div>
 
-  		<button className="btn btn-primary w-100 mb-3" onClick={handleLogin}>Login</button>
-				<p className="mt-4 text-center">
-					New here? <a href="/app/register" className="text-primary">Register Here</a>
-				</p>
+  		<button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
+        </form>
+		<p className="mt-4 text-center">
+			New here? <a href="/app/register" className="text-primary">Register Here</a>
+		</p>
 
             </div>
           </div>
         </div>
       </div>
-    )
-}
+    );
 
 export default LoginPage;
