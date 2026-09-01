@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 const express = require('express');
 const router = express.Router();
 const connectToDatabase = require("../models/db");
@@ -12,7 +13,7 @@ router.get('/', async (req, res, next) => {
         const gifts = await collection.find({}).toArray();
         res.json(gifts);
     } catch (e) {
-        logger.error('Error fetching gifts:', e)
+        logger.error('Error fetching gifts:', e);
         next(e);
     }
 });
