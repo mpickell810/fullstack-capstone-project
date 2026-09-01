@@ -22,7 +22,7 @@ function LoginPage() {
 const handleLogin = async (e) => {
     if (e && typeof e.preventDefault === 'function') e.preventDefault();
     try{
-      const response = await fetch(`${urlConfig}/api/auth/login`, {
+      const response = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
 		   method: 'POST',
         headers: {
             'Content-Type': 'application/json',

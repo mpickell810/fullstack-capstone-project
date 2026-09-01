@@ -36,8 +36,9 @@ function RegisterPage() {
             console.log('er', json.error);
 
         if (json.authtoken) {
+            console.log("Full response:", json);
             sessionStorage.setItem('auth-token', json.authtoken);
-            sessionStorage.setItem('name', firstName);
+            sessionStorage.setItem('name', json.userName || firstName);
             sessionStorage.setItem('email', json.email);
             setIsLoggedIn(true);
             navigate('/app');
@@ -69,7 +70,7 @@ function RegisterPage() {
                         className="form-control"
                         placeholder="Enter your firstName"
                         value={firstName}
-                        onChange={(e) => setFirstName(e.target.vlaue)}
+                        onChange={(e) => setFirstName(e.target.value)}
                         />
                     </div>
                     {/* last name */}
@@ -81,7 +82,7 @@ function RegisterPage() {
                         className="form-control"
                         placeholder="Enter your lastName"
                         value={lastName}
-                        onChange={(e) => setLastName(e.target.vlaue)}
+                        onChange={(e) => setLastName(e.target.value)}
                         />
                     </div>
                     {/* email */}
@@ -93,7 +94,7 @@ function RegisterPage() {
                         className="form-control"
                         placeholder="Enter your email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.vlaue)}
+                        onChange={(e) => setEmail(e.target.value)}
                         />
                         <div className="text-danger">{showerr}</div>
                     </div>
@@ -106,7 +107,7 @@ function RegisterPage() {
                         className="form-control"
                         placeholder="Enter your password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.vlaue)}
+                        onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
